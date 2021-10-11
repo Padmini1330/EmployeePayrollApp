@@ -15,7 +15,10 @@ class EmployeePayrollData
     }
     set name(name) 
     {
-        this._name = name;
+        const NAME_REGEX = RegExp("^[A-Z]{1}[a-z]{2,}([ ][A-Z]{1}[a-z]{2,})?$");
+        if (NAME_REGEX.test(name)) {
+            this._name = name;
+        } else throw "Name is Incorrect!";
     }
     get salary() 
     {
@@ -37,11 +40,16 @@ class EmployeePayrollData
 
     get startDate() 
     {
-        return this._startDate;
+       return this._startDate;
     }
     set startDate(startDate) 
     {
-        this._startDate = startDate;
+        let today=new Date();
+        let oneMonth=30*24*60*60*1000;
+        if(startDate <= new Date() && (Date.now()-startDate)<oneMonth) {
+            this._startDate = startDate;
+        } 
+        else throw "Start Date is Incorrect!";
     }
 
     get departments() 
@@ -50,7 +58,11 @@ class EmployeePayrollData
     }
     set departments(departments) 
     {
-        this._departments = departments;
+        if (departments.length != 0) 
+        {
+            this._departments = departments;
+        } 
+        else throw "No Department Entered!";
     }
 
     toString() 
@@ -66,31 +78,46 @@ class EmployeePayrollData
 function save() 
 {
     let employeePayrollData = new EmployeePayrollData();
-    employeePayrollData.name = document.querySelector("#name").value;
+    try 
+    {
+        employeePayrollData.name = document.querySelector("#name").value;
+    } 
+    catch (error) 
+    {
+        alert(error);
+        return;
+    }
     employeePayrollData.gender = document.querySelector("#male").checked ? "M" : "F";
     employeePayrollData.salary = document.querySelector("#salary").value;
     dateString = document.querySelector("#month").value + " " + document.querySelector("#day").value + ", " + document.querySelector("#year").value;
-    employeePayrollData.startDate = new Date(dateString);
+    try 
+    {
+        employeePayrollData.startDate = new Date(dateString);
+    } 
+    catch (error) 
+    {
+        alert(error);
+        return;
+    }
     let departmentsArray = [];
     document.querySelectorAll("[name=department]").forEach(input => {
         if (input.checked) departmentsArray.push(input.value);
     });
-    employeePayrollData.departments = departmentsArray;
-    console.log(employeePayrollData);
+    try 
+    {
+        employeePayrollData.departments = departmentsArray;
+    } 
+    catch (error) 
+    {
+        alert(error);
+        return;
+    }
     alert("Employee Added Successfully!\n" + employeePayrollData.toString());
 }
+var a=new Date();
+console.log(a);
 const salary = document.querySelector("#salary");
 const output = document.querySelector(".salary-output");
 salary.oninput = function() {
     output.textContent = salary.value;
 };
-
-const text = document.querySelector('#name')
-const textError = document.querySelector('.text-error')
-text.addEventListener('input', function() {
-    let nameRegEx = RegExp('^[A-Z]{1}[a-zA-z]{2,}$')
-    if(nameRegEx.test(text.value))
-        textError.textContent = ""
-    else
-        textError.textContent = "Incorrect Name"
-});
