@@ -97,3 +97,38 @@ const getValue = (propertyId) => {
     let value = document.querySelector(propertyId).value;
     return value;
 };
+
+const resetForm = () => {
+    setValue("#name", "");
+    unsetSelectedValues("[name=profile]");
+    unsetSelectedValues("[name=gender]");
+    unsetSelectedValues("[name=department]");
+    setValue("#day", "1");
+    setValue("#month", "January");
+    setValue("#year", "2020");
+    setValue("#notes", "");
+    resetRange("#salary", ".salary-output");
+};
+
+const setValue = (propertyId, value) => {
+    const element = document.querySelector(propertyId);
+    element.value = value;
+};
+
+const unsetSelectedValues = (propertyName) => 
+{
+    let allValues = document.querySelectorAll(propertyName);
+    allValues.forEach(input => input.checked == false);
+};
+
+const setTextValue = (propertyId, value) => {
+    const element = document.querySelector(propertyId);
+    element.textContent = value;
+};
+
+const resetRange = (propertyId, outputId) => {
+    const rangeElement = document.querySelector(propertyId);
+    rangeElement.value = 400000;
+    const outputElement = document.querySelector(outputId);
+    outputElement.textContent = rangeElement.value;
+};
