@@ -1,58 +1,27 @@
-function save() 
-{
-    let employeePayrollData = new EmployeePayrollData();
-    try 
-    {
-        employeePayrollData.name = document.querySelector("#name").value;
-    } 
-    catch (error) 
-    {
-        alert(error);
-        return;
-    }
-    employeePayrollData.gender = document.querySelector("#male").checked ? "M" : "F";
-    employeePayrollData.salary = document.querySelector("#salary").value;
-    dateString = document.querySelector("#month").value + " " + 
-                document.querySelector("#day").value + ", " + 
-                document.querySelector("#year").value;
-    try 
-    {
-        employeePayrollData.startDate = new Date(dateString);
-    } 
-    catch (error) 
-    {
-        alert(error);
-        return;
-    }
-    let departmentsArray = [];
-    document.querySelectorAll("[name=department]").forEach(input => {
-        if (input.checked) departmentsArray.push(input.value);
-    });
-    try 
-    {
-        employeePayrollData.departments = departmentsArray;
-    } 
-    catch (error) 
-    {
-        alert(error);
-        return;
-    }
-    alert("Employee Added Successfully!\n" + employeePayrollData.toString());
-}
-var a=new Date();
-console.log(a);
-const salary = document.querySelector("#salary");
-const output = document.querySelector(".salary-output");
-salary.oninput = function() {
-    output.textContent = salary.value;
-};
+window.addEventListener("DOMContentLoaded", () => {
 
-const text = document.querySelector('#name')
-const textError = document.querySelector('.text-error')
-text.addEventListener('input', function() {
-    let nameRegEx = RegExp('^[A-Z]{1}[a-zA-z]{2,}$')
-    if(nameRegEx.test(text.value))
-        textError.textContent = ""
-    else
-        textError.textContent = "Incorrect Name"
+    const name = document.querySelector("#name");
+    const nameError = document.querySelector(".text-error");
+    name.addEventListener("input", function() {
+        if (name.value.length == 0) {
+            nameError.textContent = "";
+            return;
+        } 
+        try 
+        {
+            (new EmployeePayrollData).name = name.value;
+            nameError.textContent = "";
+        } 
+        catch (error) 
+        {
+            nameError.textContent = error;
+        }
+    });
+
+    const salary = document.querySelector("#salary");
+    const output = document.querySelector(".salary-output");
+    output.textContent=salary.value;
+    salary.addEventListener('input',function(){
+        output.textContent = salary.value;
+    });
 });
