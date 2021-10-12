@@ -28,9 +28,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 const save = () => {
-    try {
+    try 
+    {
         let employeePayrollData = createEmployeePayrollObject();
-    } catch (submitError) {
+        updateLocalStorage(employeePayrollData);
+    } 
+    catch (submitError) 
+    {
         alert(submitError);
         return;
     }
@@ -62,6 +66,23 @@ const createEmployeePayrollObject = () => {
     alert("Employee Added Successfully!\n" + employeePayrollData.toString());
     return employeePayrollData;
 };
+
+
+function updateLocalStorage(employeePayrollData) 
+{
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    if (employeePayrollList != undefined) 
+    {
+        employeePayrollList.push(employeePayrollData);
+    } 
+    else 
+    {
+        employeePayrollList = [employeePayrollData];
+    }
+    alert("Local Storage Updated Successfully!\nTotal Employees : " + employeePayrollList.length);
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+}
+
 
 const getSelectedValues = (propertyName) => {
     let allValues = document.querySelectorAll(propertyName);
