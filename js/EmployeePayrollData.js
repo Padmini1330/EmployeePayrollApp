@@ -15,7 +15,7 @@ class EmployeePayrollData
     }
     set name(name) 
     {
-        const NAME_REGEX = RegExp("^[A-Z]{1}[a-z]{2,}([ ][A-Z]{1}[a-z]{2,})?$");
+        const NAME_REGEX = RegExp("^[A-Z]{1}[a-zA-Z]{2,}?$");
         if (NAME_REGEX.test(name)) {
             this._name = name;
         } else throw "Name is Incorrect!";
