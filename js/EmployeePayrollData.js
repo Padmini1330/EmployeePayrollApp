@@ -9,6 +9,15 @@ class EmployeePayrollData
         this._id = id;
     }
 
+    get profilePicture() 
+    {
+        return this._profilePicture;
+    }
+    set profilePicture(profilePicture) 
+    {
+        this._profilePicture = profilePicture;
+    }
+
     get name() 
     {
         return this._name;
@@ -65,12 +74,13 @@ class EmployeePayrollData
         else throw "No Department Entered!";
     }
 
-    toString() 
-    {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+   
+
+    toString() {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
         const employeeDate = !this.startDate ? "undefined" :
             this.startDate.toLocaleDateString("en-US", options);
-        return "[ id: " + this.id + ", name: " + this.name + ", salary: " + this.salary +
-            ", gender: " + this.gender + ", startDate: " + employeeDate + ", departments: " + this.departments + " ]" + "\n";
+        return "[ id: " + this.id + ", name: " + this.name + ", gender: " + this.gender + ", profilePicture: " + this.profilePicture +
+            ", salary: " + this.salary + ", startDate: " + employeeDate + ", departments: " + this.departments + ", note: " + this._note + " ]" + "\n";
     }
 }
