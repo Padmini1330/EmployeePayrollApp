@@ -13,14 +13,16 @@ const getEmployeePayrollDataFromStorage = () => {
 
 const createInnerHtml = () => {
     const headerHtml ="<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th><th>Start Date</th><th>Actions</th>";
-    let innerHtml = `${headerHtml}`;
     if (employeePayrollList.length == 0) {
         return;
     }
-    for (let employeePayrollData of employeePayrollList) {
+    let innerHtml = `${headerHtml}`;
+    
+    for (const employeePayrollData of employeePayrollList) {
+        console.log(employeePayrollData._profilePicture);
         innerHtml = `${innerHtml}
         <tr>
-            <td><img class="profile" alt="" src="${employeePayrollData._profilePicture}"></td>
+            <td><img class="profile" src="${employeePayrollData._profilePicture}"></td>
             <td>${employeePayrollData._name}</td>
             <td>${employeePayrollData._gender}</td>
             <td>${getDepartmentHtml(employeePayrollData._departments)}</td>
