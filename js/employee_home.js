@@ -3,14 +3,8 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const createInnerHtml = () => {
-    const headerHtml =
-        "<th></th>" +
-        "<th>Name</th>" +
-        "<th>Gender</th>" +
-        "<th>Department</th>" +
-        "<th>Salary</th>" +
-        "<th>Start Date</th>" +
-        "<th>Actions</th>";
+    const headerHtml ="<th></th><th>Name</th><th>Gender</th><th>Department</th>"+
+                        "<th>Salary</th><th>Start Date</th><th>Actions</th>";
     const innerHtml = `${headerHtml}
     <tr>
         <td><img class="profile" alt="" src="../assets/profile-images/Ellipse -3.png"></td>
