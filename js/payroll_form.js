@@ -70,7 +70,7 @@ const createEmployeePayrollObject = () => {
 
 function updateLocalStorage(employeePayrollData) 
 {
-    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList")); //storage object
     if (employeePayrollList != undefined) 
     {
         employeePayrollList.push(employeePayrollData);
@@ -126,7 +126,7 @@ const setTextValue = (propertyId, value) => {
     element.textContent = value;
 };
 
-const resetRange = (propertyId, outputId) => {
+const resetSalaryRange = (propertyId, outputId) => {
     const rangeElement = document.querySelector(propertyId);
     rangeElement.value = 400000;
     const outputElement = document.querySelector(outputId);
