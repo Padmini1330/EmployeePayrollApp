@@ -1,40 +1,62 @@
 window.addEventListener("DOMContentLoaded", () => {
 
     const name = document.querySelector("#name");
-    const nameError = document.querySelector(".text-error");
-    name.addEventListener("input", function() {
-        if (name.value.length == 0) {
-            nameError.textContent = "";
-            return;
-        } 
-        try 
-        {
-            (new EmployeePayrollData).name = name.value;
-            nameError.textContent = "";
-        } 
-        catch (error) 
-        {
-            nameError.textContent = error;
-        }
-    });
+    const nameError = document.querySelector(".name-error");
+    const validName = document.querySelector(".valid-name");
+    if (name) {
+        name.addEventListener("input", function() {
+            if (name.value.length == 0) {
+                nameError.textContent = "";
+                validName.textContent = "";
+            } else {
+                try {
+                    (new EmployeePayrollData).name = name.value;
+                    nameError.textContent = "";
+                    validName.textContent = '✓';
+                    document.querySelector(".submitButton").disabled = false;
+                } catch (error) {
+                    nameError.textContent = error;
+                    validName.textContent = "";
+                    document.querySelector(".submitButton").disabled = true;
+                }
+            }
+        });
+    }
+
+
+    const startDate = document.querySelector("#startDate");
+    const startDateError = document.querySelector(".startDate-error");
+    const validStartDate = document.querySelector(".valid-startDate");
+    if (startDate) {
+        startDate.addEventListener("input", function() {
+            try {
+                let dateString = document.querySelector("#month").value + " " + document.querySelector("#day").value + ", " + document.querySelector("#year").value;
+                (new EmployeePayrollData).startDate = new Date(dateString);
+                startDateError.textContent = "";
+                validStartDate.textContent = '✓';
+                document.querySelector(".submitButton").disabled = false;
+            } catch (error) {
+                startDateError.textContent = error;
+                validStartDate.textContent = "";
+                document.querySelector(".submitButton").disabled = true;
+            }
+        });
+    }
 
     const salary = document.querySelector("#salary");
     const output = document.querySelector(".salary-output");
-    output.textContent=salary.value;
-    salary.addEventListener('input',function(){
-        output.textContent = salary.value;
-    });
+    if (salary) {
+        salary.oninput = function() {
+            output.textContent = salary.value;
+        };
+    }
 });
 
-
 const save = () => {
-    try 
-    {
+    try {
         let employeePayrollData = createEmployeePayrollObject();
-        updateLocalStorage(employeePayrollData);
-    } 
-    catch (submitError) 
-    {
+        if (employeePayrollData != undefined) updateLocalStorage(employeePayrollData);
+    } catch (submitError) {
         alert(submitError);
         return;
     }
@@ -42,15 +64,8 @@ const save = () => {
 
 const createEmployeePayrollObject = () => {
     let employeePayrollData = new EmployeePayrollData();
-    try
-    {
-        employeePayrollData.name = getValue("#name");
-    }
-    catch(error)
-    {
-        throw error;
-    }
-    
+
+    employeePayrollData.name = getValue("#name");
     employeePayrollData.gender = getSelectedValues("[name=gender]").pop();
     employeePayrollData.profilePicture = getSelectedValues("[name=profile]").pop();
     employeePayrollData.salary = getValue("#salary");
@@ -63,26 +78,10 @@ const createEmployeePayrollObject = () => {
         alert(error);
         return;
     }
+    employeePayrollData.id = createEmployeeId();
     alert("Employee Added Successfully!\n" + employeePayrollData.toString());
     return employeePayrollData;
 };
-
-
-function updateLocalStorage(employeePayrollData) 
-{
-    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList")); //storage object
-    if (employeePayrollList != undefined) 
-    {
-        employeePayrollList.push(employeePayrollData);
-    } 
-    else 
-    {
-        employeePayrollList = [employeePayrollData];
-    }
-    alert("Local Storage Updated Successfully!\nTotal Employees : " + employeePayrollList.length);
-    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
-}
-
 
 const getSelectedValues = (propertyName) => {
     let allValues = document.querySelectorAll(propertyName);
@@ -98,37 +97,58 @@ const getValue = (propertyId) => {
     return value;
 };
 
+function updateLocalStorage(employeePayrollData) {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    if (employeePayrollList != undefined) {
+        employeePayrollList.push(employeePayrollData);
+    } else {
+        employeePayrollList = [employeePayrollData];
+    }
+    alert("Local Storage Updated Successfully!\nTotal Employees : " + employeePayrollList.length);
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+}
+
+const createEmployeeId = () => {
+    let employeeId = localStorage.getItem("EmployeeID");
+    employeeId = !employeeId ? 1 : (parseInt(employeeId) + 1).toString();
+    localStorage.setItem("EmployeeID", employeeId);
+    return employeeId;
+};
+
 const resetForm = () => {
-    setValue("#name", "");
+    setDefaultValue("#name", "");
+    setDefautlText(".name-error");
+    setDefautlText(".valid-name");
     unsetSelectedValues("[name=profile]");
     unsetSelectedValues("[name=gender]");
     unsetSelectedValues("[name=department]");
-    setValue("#day", "1");
-    setValue("#month", "January");
-    setValue("#year", "2020");
-    setValue("#notes", "");
     resetRange("#salary", ".salary-output");
+    setDefaultValue("#day", "1");
+    setDefaultValue("#month", "January");
+    setDefaultValue("#year", "2020");
+    setDefautlText(".startDate-error");
+    setDefautlText(".valid-startDate");
+    setDefaultValue("#notes", "");
 };
 
-const setValue = (propertyId, value) => {
+const setDefaultValue = (propertyId, value) => {
     const element = document.querySelector(propertyId);
     element.value = value;
 };
 
-const unsetSelectedValues = (propertyName) => 
-{
-    let allValues = document.querySelectorAll(propertyName);
+const unsetSelectedValues = (propertyName) => {
+    allValues = document.querySelectorAll(propertyName);
     allValues.forEach(input => input.checked == false);
 };
 
-const setTextValue = (propertyId, value) => {
-    const element = document.querySelector(propertyId);
-    element.textContent = value;
-};
-
-const resetSalaryRange = (propertyId, outputId) => {
+const resetRange = (propertyId, outputId) => {
     const rangeElement = document.querySelector(propertyId);
     rangeElement.value = 400000;
     const outputElement = document.querySelector(outputId);
     outputElement.textContent = rangeElement.value;
+};
+
+const setDefautlText = (propertyId) => {
+    const contentElement = document.querySelector(propertyId);
+    contentElement.textContent = "";
 };
