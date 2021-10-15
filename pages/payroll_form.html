@@ -8,6 +8,8 @@
     <title>Employee Payroll Form</title>
     <script defer src="../js/payroll_form.js"></script>
     <script defer src="../js/EmployeePayrollData.js"></script>
+    <script src="../js/site_properties.js"></script>
+    <script src="../js/utility.js"></script>
 </head>
 
 <body>
@@ -23,7 +25,7 @@
         </div>
     </header>
     <div id="formId" class="form-content">
-        <form class="form" action="#" autocomplete="off" onreset="resetForm()" onsubmit="save();return false">
+        <form class="form" action="#" autocomplete="off" onreset="resetForm()" onsubmit="save(event);return false">
             <div class="form-head">Employee Payroll form</div>
             <div class="row-content">
                 <label class="label text" for="name">Name</label>
