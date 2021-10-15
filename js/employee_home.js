@@ -48,8 +48,6 @@ const getDepartmentHtml = (departmentList) => {
                                       
 const remove = (node) => {
     let employeePayrollData = employeePayrollList.find(employeeData => employeeData._id == node.id);
-    console.log(employeePayrollList);
-    console.log(employeePayrollData);
     if (!employeePayrollData)
     {
         return;
@@ -62,4 +60,11 @@ const remove = (node) => {
     document.querySelector(".emp-count").textContent = employeePayrollList.length;
     console.log(employeePayrollList.length);
     createInnerHtml();
+};
+
+const update = (node) => {
+    let employeePayrollData = employeePayrollList.find(employeeData => employeeData._id == node.id);
+    if (!employeePayrollData) return;
+    localStorage.setItem("EmployeeToEdit", JSON.stringify(employeePayrollData));
+    window.location.replace(site_properties.add_emp_payroll_page);
 };
