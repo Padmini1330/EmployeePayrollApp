@@ -1,7 +1,6 @@
 class EmployeePayrollData 
 {
     id;
-    
     get name() 
     {
         return this._name;

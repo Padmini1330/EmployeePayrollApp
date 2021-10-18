@@ -1,5 +1,5 @@
 let isUpdate = false;
-let employeePayrollObject = {};
+let employeePayrollObject={};
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -51,18 +51,77 @@ window.addEventListener("DOMContentLoaded", () => {
 const save = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    try {
-        setEmployeePayrollObject();
-        updateLocalStorage();
-        resetForm();
-        window.location.replace(site_properties.home_page);
-    } catch (submitError) {
-        alert(submitError);
-        resetForm();
-        return;
+  try 
+  {
+    setEmployeePayrollObject();
+    if(site_properties.use_local_storage.match("true"))
+    {
+      createAndUpdateStorage();
+      resetForm();
+      window.location.replace(site_properties.home_page);
     }
+    else
+    {
+      createOrUpdateEmployeePayroll();
+    }
+  }
+  catch (e) {
+    alert(e);
+  }
 };
 
+const createOrUpdateEmployeePayroll = () => {
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if(isUpdate){
+      methodCall = "PUT";
+      postURL = postURL + employeePayrollObject.id.toString();
+    }
+    makeServiceCall(methodCall, postURL, true, employeePayrollObject)
+      .then(() => {
+        resetForm();
+        window.location.replace(site_properties.home_page);
+      })
+      .catch(error => {
+        throw error;
+      })
+  };
+  function makeServiceCall(methodType, url, async = true, data= null) 
+  {
+      return new Promise( function(resolve, reject){
+          let xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+              console.log("State Changed Called. Ready State: "+ xhr.readyState+" Status:"+xhr.status);
+              if(xhr.status.toString().match('^[2][0-9]{2}$')) 
+              {
+                  resolve(xhr.responseText);
+              }
+              else if(xhr.status.toString().match('^[4,5][0-9]{2}$')) 
+              {
+                  reject({
+                      status: xhr.status,
+                      statusText: xhr.statusText
+                  });
+                  console.log("XHR Failed");
+              }
+          }
+          xhr.onerror = function () {
+              reject({
+                  status: this.status,
+                  statusText : xhttp.statusText
+              })
+          }
+          xhr.open(methodType, url, async);
+          if(data)
+          {
+              console.log(JSON.stringify(data));
+              xhr.setRequestHeader("Content-Type", "application/json");
+              xhr.send(JSON.stringify(data));
+          }
+          else xhr.send();
+          console.log(methodType+" request sent to the server");
+      });
+  }
 const setEmployeePayrollObject = () => {
     if(!isUpdate && site_properties.use_local_storage.match("true"))
     {
@@ -78,6 +137,7 @@ const setEmployeePayrollObject = () => {
     employeePayrollObject._departments = getSelectedValues("[name=department]");
 };
 
+
 const updateLocalStorage = () => {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
     if (employeePayrollList) {
@@ -89,7 +149,7 @@ const updateLocalStorage = () => {
             employeePayrollList.splice(index, 1, employeePayrollObject);
         }
     } else {
-        employeePayrollList = [createEmployeePayrollData()];
+        employeePayrollList = [employeePayrollObject];
     }
 
     alert("Local Storage Updated Successfully!\nTotal Employees : " + employeePayrollList.length);

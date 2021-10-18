@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   });
   
   const processEmployeePayrollDataResponse = () => {
+    console.log("inside process")
     document.querySelector(".emp-count").textContent = employeePayrollList.length;
     createInnerHtml();
     localStorage.removeItem('edit');
