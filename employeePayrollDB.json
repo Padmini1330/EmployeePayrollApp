@@ -4,26 +4,26 @@
       "id": 1,
       "_name": "Mark Taylor",
       "_gender": "male",
-      "_department": [
+      "_departments": [
         "Engineering",
         "Finance"
       ],
       "_salary": "500000",
-      "_startDate": "29 Oct 2019",
+      "_startDate": "29 Oct 2021",
       "_note": "All In One",
-      "_profilePic": "../assets/profile-images/Ellipse -3.png"
+      "_profilePicture": "../assets/profile-images/Ellipse -3.png"
     },
     {
       "id": 2,
       "_name": "Bill Gates",
       "_gender": "male",
-      "_department": [
+      "_departments": [
         "Engineering"
       ],
       "_salary": "500000",
-      "_startDate": "29 Oct 2019",
+      "_startDate": "29 Oct 2021",
       "_note": "Terrific Engineer",
-      "_profilePic": "../assets/profile-images/Ellipse -1.png"
+      "_profilePicture": "../assets/profile-images/Ellipse -1.png"
     },
     {
       "_name": "Amarpa Shashanka Keerthi Kumar",
