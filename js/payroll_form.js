@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 setTextContent(".valid-name", "");
             } else {
                 try {
-                    (new EmployeePayrollData).name = name.value;
+                    checkName(name.value);
                     setTextContent(".name-error", "");
                     document.querySelector(".submitButton").disabled = false;
                 } catch (error) {
@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
         startDate.addEventListener("input", function() {
             try {
                 let dateString = document.querySelector("#month").value + " " + document.querySelector("#day").value + ", " + document.querySelector("#year").value;
-                (new EmployeePayrollData).startDate = new Date(dateString);
+                checkStartDate(new Date(Date.parse(startDate)));
                 setTextContent(".startDate-error", "");
                 document.querySelector(".submitButton").disabled = false;
             } catch (error) {
@@ -64,6 +64,10 @@ const save = (event) => {
 };
 
 const setEmployeePayrollObject = () => {
+    if(!isUpdate && site_properties.use_local_storage.match("true"))
+    {
+        employeePayrollObject.id=createEmployeeId();
+    }
     employeePayrollObject._name = getValue("#name");
     employeePayrollObject._profilePicture = getSelectedValues("[name=profile]").pop();
     employeePayrollObject._gender = getSelectedValues("[name=gender]").pop();
@@ -77,12 +81,12 @@ const setEmployeePayrollObject = () => {
 const updateLocalStorage = () => {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
     if (employeePayrollList) {
-        let employeePayrollData = employeePayrollList.find(employeeData => employeeData._id == employeePayrollObject._id);
+        let employeePayrollData = employeePayrollList.find(employeeData => employeeData.id == employeePayrollObject.id);
         if (!employeePayrollData) {
-            employeePayrollList.push(createEmployeePayrollData());
+            employeePayrollList.push(employeePayrollObject);
         } else {
-            const index = employeePayrollList.map(employeeData => employeeData._id).indexOf(employeePayrollData._id);
-            employeePayrollList.splice(index, 1, createEmployeePayrollData(employeePayrollData._id));
+            const index = employeePayrollList.map(employeeData => employeeData.id).indexOf(employeePayrollData.id);
+            employeePayrollList.splice(index, 1, employeePayrollObject);
         }
     } else {
         employeePayrollList = [createEmployeePayrollData()];
@@ -91,37 +95,6 @@ const updateLocalStorage = () => {
     alert("Local Storage Updated Successfully!\nTotal Employees : " + employeePayrollList.length);
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
-
-const createEmployeePayrollData = (id) => {
-    let employeePayrollData = new EmployeePayrollData();
-    if (!id) employeePayrollData._id = createEmployeeId();
-    else employeePayrollData._id = id;
-    setEmployeePayrollData(employeePayrollData);
-    return employeePayrollData;
-};
-
-const setEmployeePayrollData = (employeePayrollData) => {
-
-    try {
-        employeePayrollData.name = employeePayrollObject._name;
-    } catch (error) {
-        setTextContent(".name-error", error)
-        throw error;
-    }
-    employeePayrollData.gender = employeePayrollObject._gender;
-    employeePayrollData.profilePicture = employeePayrollObject._profilePicture;
-    employeePayrollData.salary = employeePayrollObject._salary;
-    try {
-        employeePayrollData.startDate = employeePayrollObject._startDate;
-    } catch (error) {
-        setTextContent(".startDate-error", error);
-        throw error;
-    }
-    employeePayrollData.note = employeePayrollObject._note;
-    employeePayrollData.departments = employeePayrollObject._departments;
-
-    alert("Employee Added Successfully!\n" + employeePayrollData.toString());
-};
 
 const createEmployeeId = () => {
     let employeeId = localStorage.getItem("EmployeeID");
