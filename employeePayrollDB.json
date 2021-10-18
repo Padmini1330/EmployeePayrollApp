@@ -1,19 +1,6 @@
 {
   "EmployeePayrollDB": [
     {
-      "id": 1,
-      "_name": "Mark Taylor",
-      "_gender": "male",
-      "_departments": [
-        "Engineering",
-        "Finance"
-      ],
-      "_salary": "500000",
-      "_startDate": "29 Oct 2021",
-      "_note": "All In One",
-      "_profilePicture": "../assets/profile-images/Ellipse -3.png"
-    },
-    {
       "id": 2,
       "_name": "Bill Gates",
       "_gender": "male",
@@ -25,18 +12,31 @@
       "_note": "Terrific Engineer",
       "_profilePicture": "../assets/profile-images/Ellipse -1.png"
     },
-    [],
     {
-      "_name": "Amarpa Shashanka Keerthi Kumar",
+      "_name": "Amarpa Shashanka",
       "_gender": "female",
       "_departments": [
-        "Sales"
+        "Sales",
+        "Finance",
+        "Engineer"
       ],
-      "_salary": "400000",
-      "_startDate": "29 Oct 2019",
-      "_note": "",
-      "_profilePicture": "../assets/profile-images/Ellipse -1.png",
+      "_salary": "479200",
+      "_startDate": "2021-10-28T18:30:00.000Z",
+      "_note": "abc",
+      "_profilePicture": "../assets/profile-images/Ellipse -4.png",
       "id": 3
+    },
+    {
+      "_name": "Padmini",
+      "_profilePicture": "../assets/profile-images/Ellipse -4.png",
+      "_gender": "female",
+      "_salary": "467600",
+      "_note": "abc",
+      "_startDate": "2021-09-30T18:30:00.000Z",
+      "_departments": [
+        "Finance"
+      ],
+      "id": 4
     }
   ]
 }
